@@ -4,12 +4,19 @@ using Sugaru_Iulia_Lab2.Data;
 using Microsoft.AspNetCore.Identity;
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminPolicy", policy =>
+   policy.RequireRole("Admin"));
+});
+
 // Add services to the container.
 builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizeFolder("/Books");
     options.Conventions.AllowAnonymousToPage("/Books/Index");
     options.Conventions.AllowAnonymousToPage("/Books/Details");
+    options.Conventions.AuthorizeFolder("/Members", "AdminPolicy");
 });
 
 builder.Services.AddDbContext<Sugaru_Iulia_Lab2Context>(options =>
